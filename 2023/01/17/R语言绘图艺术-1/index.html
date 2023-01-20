@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="我们在科研时候，经常需要绘制图像。 ggplot2 （R 语言）是绘图利器。之前仅仅是会应用，不能真正科学、系统地根据需要绘图。本系列文目的是全面细致地学习 ggplot2 的绘图思想和体系。 由于笔者认为R语言术语翻译后，经常会造成不必要的语义困惑，因此部分内容笔者会使用英语。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="R语言绘图艺术-1（买什么车最省油？）">
+<meta property="og:url" content="http://example.com/2023/01/17/R%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BE%E8%89%BA%E6%9C%AF-1/index.html">
+<meta property="og:site_name" content="You Yang">
+<meta property="og:description" content="我们在科研时候，经常需要绘制图像。 ggplot2 （R 语言）是绘图利器。之前仅仅是会应用，不能真正科学、系统地根据需要绘图。本系列文目的是全面细致地学习 ggplot2 的绘图思想和体系。 由于笔者认为R语言术语翻译后，经常会造成不必要的语义困惑，因此部分内容笔者会使用英语。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="d:\Blog\source_posts\R%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BE\1-%E6%95%A3%E7%82%B9%E5%9B%BE\point-1.png">
+<meta property="og:image" content="d:\Blog\source_posts\R%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BE\1-%E6%95%A3%E7%82%B9%E5%9B%BE\point-2-color.png">
+<meta property="og:image" content="d:\Blog\source_posts\R%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BE\1-%E6%95%A3%E7%82%B9%E5%9B%BE\point-3-toomuch.png">
+<meta property="og:image" content="d:\Blog\source_posts\R%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BE\1-%E6%95%A3%E7%82%B9%E5%9B%BE\post-4-facetingClass.png">
+<meta property="article:published_time" content="2023-01-17T12:32:23.000Z">
+<meta property="article:modified_time" content="2023-01-20T04:46:59.627Z">
+<meta property="article:author" content="Youyang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="d:\Blog\source_posts\R%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BE\1-%E6%95%A3%E7%82%B9%E5%9B%BE\point-1.png">
+
+<link rel="canonical" href="http://example.com/2023/01/17/R%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BE%E8%89%BA%E6%9C%AF-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>R语言绘图艺术-1（买什么车最省油？） | You Yang</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">You Yang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">我们趋行在人生这个亘古的旅途，在坎坷中奔跑，在挫折里涅槃，忧愁缠满全身，痛苦飘洒一地。我们累，却无从止歇；我们苦，却无法回避。——《百年孤独》</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/17/R%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BE%E8%89%BA%E6%9C%AF-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Youyang">
+      <meta itemprop="description" content="游阳">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="You Yang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          R语言绘图艺术-1（买什么车最省油？）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-17 20:32:23" itemprop="dateCreated datePublished" datetime="2023-01-17T20:32:23+08:00">2023-01-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-01-20 12:46:59" itemprop="dateModified" datetime="2023-01-20T12:46:59+08:00">2023-01-20</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>我们在科研时候，经常需要绘制图像。 ggplot2 （R 语言）是绘图利器。之前仅仅是会应用，不能真正科学、系统地根据需要绘图。本系列文目的是全面细致地学习 ggplot2 的绘图思想和体系。</p>
+<p>由于笔者认为R语言术语翻译后，经常会造成不必要的语义困惑，因此部分内容笔者会使用英语。</p>
+<span id="more"></span>
+
+<h1 id="Key-components"><a href="#Key-components" class="headerlink" title="Key components"></a>Key components</h1><p>Every ggplot2 plot has three <strong>key components:</strong></p>
+<ul>
+<li><strong>data</strong></li>
+<li><strong>aesthetic mappings</strong> </li>
+<li>at least one <strong>layer</strong> ( usually created with a geom function)</li>
+</ul>
+<h1 id="MPG"><a href="#MPG" class="headerlink" title="MPG"></a>MPG</h1><p>It includes information about the fuel economy of popular car models in 1999 and 2008, collected by the US Environmental Protection Agency, <a target="_blank" rel="noopener" href="http://fueleconomy.gov/">http://fueleconomy.gov</a>.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&gt;</span> mpg</span><br><span class="line"><span class="comment"># A tibble: 234 x 11</span></span><br><span class="line">   manufacturer model displ  year   cyl trans drv     cty   hwy</span><br><span class="line">   <span class="operator">&lt;</span>chr<span class="operator">&gt;</span>        <span class="operator">&lt;</span>chr<span class="operator">&gt;</span> <span class="operator">&lt;</span>dbl<span class="operator">&gt;</span> <span class="operator">&lt;</span>int<span class="operator">&gt;</span> <span class="operator">&lt;</span>int<span class="operator">&gt;</span> <span class="operator">&lt;</span>chr<span class="operator">&gt;</span> <span class="operator">&lt;</span>chr<span class="operator">&gt;</span> <span class="operator">&lt;</span>int<span class="operator">&gt;</span> <span class="operator">&lt;</span>int<span class="operator">&gt;</span></span><br><span class="line"> <span class="number">1</span> audi         a4      <span class="number">1.8</span>  <span class="number">1999</span>     <span class="number">4</span> auto<span class="operator">~</span> f        <span class="number">18</span>    <span class="number">29</span></span><br><span class="line"> <span class="number">2</span> audi         a4      <span class="number">1.8</span>  <span class="number">1999</span>     <span class="number">4</span> manu<span class="operator">~</span> f        <span class="number">21</span>    <span class="number">29</span></span><br><span class="line"> <span class="number">3</span> audi         a4      <span class="number">2</span>    <span class="number">2008</span>     <span class="number">4</span> manu<span class="operator">~</span> f        <span class="number">20</span>    <span class="number">31</span></span><br><span class="line"> <span class="number">4</span> audi         a4      <span class="number">2</span>    <span class="number">2008</span>     <span class="number">4</span> auto<span class="operator">~</span> f        <span class="number">21</span>    <span class="number">30</span></span><br><span class="line"> <span class="number">5</span> audi         a4      <span class="number">2.8</span>  <span class="number">1999</span>     <span class="number">6</span> auto<span class="operator">~</span> f        <span class="number">16</span>    <span class="number">26</span></span><br><span class="line"> <span class="number">6</span> audi         a4      <span class="number">2.8</span>  <span class="number">1999</span>     <span class="number">6</span> manu<span class="operator">~</span> f        <span class="number">18</span>    <span class="number">26</span></span><br><span class="line"> <span class="number">7</span> audi         a4      <span class="number">3.1</span>  <span class="number">2008</span>     <span class="number">6</span> auto<span class="operator">~</span> f        <span class="number">18</span>    <span class="number">27</span></span><br><span class="line"> <span class="number">8</span> audi         a4 q<span class="operator">~</span>   <span class="number">1.8</span>  <span class="number">1999</span>     <span class="number">4</span> manu<span class="operator">~</span> <span class="number">4</span>        <span class="number">18</span>    <span class="number">26</span></span><br><span class="line"> <span class="number">9</span> audi         a4 q<span class="operator">~</span>   <span class="number">1.8</span>  <span class="number">1999</span>     <span class="number">4</span> auto<span class="operator">~</span> <span class="number">4</span>        <span class="number">16</span>    <span class="number">25</span></span><br><span class="line"><span class="number">10</span> audi         a4 q<span class="operator">~</span>   <span class="number">2</span>    <span class="number">2008</span>     <span class="number">4</span> manu<span class="operator">~</span> <span class="number">4</span>        <span class="number">20</span>    <span class="number">28</span></span><br><span class="line"><span class="comment"># ... with 224 more rows, and 2 more variables: fl &lt;chr&gt;,</span></span><br><span class="line"><span class="comment">#   class &lt;chr&gt;</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center">标签</th>
+<th align="center">释义（英）</th>
+<th align="center">释义（中）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">displ</td>
+<td align="center">engine displacement in litres</td>
+<td align="center">发动机排量</td>
+</tr>
+<tr>
+<td align="center">cty &amp; hty</td>
+<td align="center">miles per gallon (mpg) for city and highway driving</td>
+<td align="center">每加仑可走英里</td>
+</tr>
+<tr>
+<td align="center">drv</td>
+<td align="center">front wheel (f), rear wheel (r) or four wheel (4)</td>
+<td align="center">驱动方式</td>
+</tr>
+<tr>
+<td align="center">class</td>
+<td align="center">categorical variable describing the “type” of car: two seater, SUV, compact, etc</td>
+<td align="center">双座、suv、紧凑型</td>
+</tr>
+<tr>
+<td align="center">cyl</td>
+<td align="center">the number of cylinders</td>
+<td align="center">气缸数</td>
+</tr>
+</tbody></table>
+<h1 id="散点图"><a href="#散点图" class="headerlink" title="散点图"></a>散点图</h1><p>散点图是最基本的图。</p>
+<h2 id="理解-data-mapping-layer"><a href="#理解-data-mapping-layer" class="headerlink" title="理解 data, mapping, layer"></a>理解 data, mapping, layer</h2><p>我们来举一个简单的例子，为的是更好的理解 ggplot2 的绘图思想，以及我们应该秉着什么原则去绘图。</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ggplot<span class="punctuation">(</span>mpg<span class="punctuation">,</span> aes<span class="punctuation">(</span>x <span class="operator">=</span> displ<span class="punctuation">,</span> y <span class="operator">=</span> hwy<span class="punctuation">)</span><span class="punctuation">)</span> <span class="operator">+</span>  <span class="comment"># x、y可以省略</span></span><br><span class="line">	geom_point<span class="punctuation">(</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="D:\Blog\source_posts\R语言绘图\1-散点图\point-1.png" alt="point-1"></p>
+<ul>
+<li><p>Data : mpg</p>
+</li>
+<li><p>Aesthetic mapping : x ~ engine size（displacement 排量等同与发动机大小） y ~ fuel economy（一定燃油可以行驶的距离）</p>
+</li>
+<li><p>Layer : points</p>
+</li>
+</ul>
+<p>当我们理解了三要素是如何被安插的，利用这个思想，我们可以画出任何我们想得到的图形。请注意<code>+</code>，我们利用它来进行 Layer 和 mapping 的组合。</p>
+<p>关于代码风格， Hadley 的代码风格应当是学习的典范：每个 command  尽量在新的一行（<code>+</code>后面另起一行）。</p>
+<p>现在我们可以看出，</p>
+<ol>
+<li>在高速公路上，排量越大的车它的燃油经济性就越低</li>
+<li>但是也会发现，有些大排量汽车，它的经济效益依然很高</li>
+</ol>
+<h2 id="Color-size-shape-and-…s"><a href="#Color-size-shape-and-…s" class="headerlink" title="Color, size , shape and …s"></a>Color, size , shape and …s</h2><p>要想探究第二条结论，我们要修缮一下 <code>aes()</code></p>
+<p>我们把上述代码改成<code>aes(displ, hwy, colour = class)</code></p>
+<p>color也可以变成 shape 、size </p>
+<p>这里我们要说明一下，每个 aesthetic mapping 都有一个 scale 来负责创建坐标轴、标记等。我们这里只是先让大家了解思维，并非探究细节，scale 在后面我会慢慢讲解。</p>
+<p><img src="D:\Blog\source_posts\R语言绘图\1-散点图\point-2-color.png" alt="point-2-color"></p>
+<p>发现紧凑型车更省钱！ SUV 属实是耗油巨兽，怪不得大G买得起养不起。。。</p>
+<p>现在我们知道了，<strong>大排量、SUV 在燃油经济性上较差，小排量、经济性在燃油经济性较好。</strong></p>
+<h2 id="Faceting"><a href="#Faceting" class="headerlink" title="Faceting"></a>Faceting</h2><p>也许你是个刚刚接触作图的大学生，希望把所有炫技的操作都整合到一个图上，笔者当年也是如此。我们要知道图是为了更好的理解数据。</p>
+<p>因此 aesthetics mapping 并非越多越好， <strong>less is usually more</strong>。假如我们使用了太多的mapp 你会很难找到变量之间的关系。</p>
+<p>例如这个图：</p>
+<p><img src="D:\Blog\source_posts\R语言绘图\1-散点图\point-3-toomuch.png" alt="point-3-toomuch"></p>
+<p>这是一个过于糟糕的图，永远不建议我们这样绘图。但是既然画了，让我们从中发现一些东西，别忘记我们还要买车。</p>
+<ul>
+<li>font （前驱车）最省油，随后是 rear （后驱），最后是四驱（大部分是吉普和 SUV ）。</li>
+<li>cylinder 越多越费油</li>
+</ul>
+<p>我们没法在一段时间做好许多事情，做好一件事情就是成功。我们不知道如何去表达很多信息时候，那么唯一良好的做法就是<strong>一步步来</strong>。ggplot2 给我们的方法是使用<strong>faceting</strong>。用一系列图片让一个阅读者从无知到熟悉，这就是绘图的艺术。</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ggplot<span class="punctuation">(</span>mpg<span class="punctuation">,</span> aes<span class="punctuation">(</span>displ<span class="punctuation">,</span> hwy<span class="punctuation">)</span><span class="punctuation">)</span> <span class="operator">+</span> </span><br><span class="line">  geom_point<span class="punctuation">(</span><span class="punctuation">)</span> <span class="operator">+</span> </span><br><span class="line">  facet_wrap<span class="punctuation">(</span><span class="operator">~</span><span class="built_in">class</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="D:\Blog\source_posts\R语言绘图\1-散点图\post-4-facetingClass.png" alt="post-4-facetingClass"></p>
+<p>我们能看到基本分为3个梯度。从省油到不省油顺序基本是紧凑型、中级大小和两座、卡车和 SUV 。faceting的使用让我们一目了然。当一个图表达不了，我们是就多画几个图。</p>
+<h2 id="Geom"><a href="#Geom" class="headerlink" title="Geom"></a>Geom</h2>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/01/11/%E5%B8%83%E9%B2%81%E6%96%AF%E5%8F%A3%E7%90%B4-%E5%8D%8A%E9%9F%B3%E9%98%B6%E5%8F%A3%E7%90%B4%E5%9E%8B%E5%8F%B7%E7%AF%87/" rel="prev" title="布鲁斯口琴/半音阶口琴型号篇（持续更新）">
+      <i class="fa fa-chevron-left"></i> 布鲁斯口琴/半音阶口琴型号篇（持续更新）
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Key-components"><span class="nav-number">1.</span> <span class="nav-text">Key components</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MPG"><span class="nav-number">2.</span> <span class="nav-text">MPG</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%A3%E7%82%B9%E5%9B%BE"><span class="nav-number">3.</span> <span class="nav-text">散点图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E8%A7%A3-data-mapping-layer"><span class="nav-number">3.1.</span> <span class="nav-text">理解 data, mapping, layer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Color-size-shape-and-%E2%80%A6s"><span class="nav-number">3.2.</span> <span class="nav-text">Color, size , shape and …s</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Faceting"><span class="nav-number">3.3.</span> <span class="nav-text">Faceting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Geom"><span class="nav-number">3.4.</span> <span class="nav-text">Geom</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Youyang</p>
+  <div class="site-description" itemprop="description">游阳</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/YouYang-W" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;YouYang-W" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Youyang</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
