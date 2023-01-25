@@ -22,22 +22,22 @@
 
   <meta name="description" content="我们在科研时候，经常需要绘制图像。 ggplot2 （R 语言）是绘图利器。之前仅仅是会应用，不能真正科学、系统地根据需要绘图。本系列文目的是全面细致地学习 ggplot2 的绘图思想和体系。 由于笔者认为R语言术语翻译后，经常会造成不必要的语义困惑，因此部分内容笔者会使用英语。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="R语言绘图艺术-1（买什么车最省油？）">
-<meta property="og:url" content="http://example.com/2023/01/17/R%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BE%E8%89%BA%E6%9C%AF-1/index.html">
+<meta property="og:title" content="ggplot2绘图艺术-1-如何买车？">
+<meta property="og:url" content="http://example.com/2023/01/21/ggplot2%E7%BB%98%E5%9B%BE%E8%89%BA%E6%9C%AF-1-%E5%A6%82%E4%BD%95%E4%B9%B0%E8%BD%A6%EF%BC%9F/index.html">
 <meta property="og:site_name" content="You Yang">
 <meta property="og:description" content="我们在科研时候，经常需要绘制图像。 ggplot2 （R 语言）是绘图利器。之前仅仅是会应用，不能真正科学、系统地根据需要绘图。本系列文目的是全面细致地学习 ggplot2 的绘图思想和体系。 由于笔者认为R语言术语翻译后，经常会造成不必要的语义困惑，因此部分内容笔者会使用英语。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="d:\Blog\source_posts\R%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BE\1-%E6%95%A3%E7%82%B9%E5%9B%BE\point-1.png">
-<meta property="og:image" content="d:\Blog\source_posts\R%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BE\1-%E6%95%A3%E7%82%B9%E5%9B%BE\point-2-color.png">
-<meta property="og:image" content="d:\Blog\source_posts\R%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BE\1-%E6%95%A3%E7%82%B9%E5%9B%BE\point-3-toomuch.png">
-<meta property="og:image" content="d:\Blog\source_posts\R%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BE\1-%E6%95%A3%E7%82%B9%E5%9B%BE\post-4-facetingClass.png">
-<meta property="article:published_time" content="2023-01-17T12:32:23.000Z">
-<meta property="article:modified_time" content="2023-01-20T04:46:59.627Z">
+<meta property="og:image" content="http://example.com/2023/01/21/ggplot2%E7%BB%98%E5%9B%BE%E8%89%BA%E6%9C%AF-1-%E5%A6%82%E4%BD%95%E4%B9%B0%E8%BD%A6%EF%BC%9F/point-1.png">
+<meta property="og:image" content="http://example.com/2023/01/21/ggplot2%E7%BB%98%E5%9B%BE%E8%89%BA%E6%9C%AF-1-%E5%A6%82%E4%BD%95%E4%B9%B0%E8%BD%A6%EF%BC%9F/point-2-color.png">
+<meta property="og:image" content="http://example.com/2023/01/21/ggplot2%E7%BB%98%E5%9B%BE%E8%89%BA%E6%9C%AF-1-%E5%A6%82%E4%BD%95%E4%B9%B0%E8%BD%A6%EF%BC%9F/point-3-toomuch.png">
+<meta property="og:image" content="http://example.com/2023/01/21/ggplot2%E7%BB%98%E5%9B%BE%E8%89%BA%E6%9C%AF-1-%E5%A6%82%E4%BD%95%E4%B9%B0%E8%BD%A6%EF%BC%9F/post-4-facetingClass.png">
+<meta property="article:published_time" content="2023-01-21T03:04:07.000Z">
+<meta property="article:modified_time" content="2023-01-25T11:11:49.336Z">
 <meta property="article:author" content="Youyang">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="d:\Blog\source_posts\R%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BE\1-%E6%95%A3%E7%82%B9%E5%9B%BE\point-1.png">
+<meta name="twitter:image" content="http://example.com/2023/01/21/ggplot2%E7%BB%98%E5%9B%BE%E8%89%BA%E6%9C%AF-1-%E5%A6%82%E4%BD%95%E4%B9%B0%E8%BD%A6%EF%BC%9F/point-1.png">
 
-<link rel="canonical" href="http://example.com/2023/01/17/R%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BE%E8%89%BA%E6%9C%AF-1/">
+<link rel="canonical" href="http://example.com/2023/01/21/ggplot2%E7%BB%98%E5%9B%BE%E8%89%BA%E6%9C%AF-1-%E5%A6%82%E4%BD%95%E4%B9%B0%E8%BD%A6%EF%BC%9F/">
 
 
 <script id="page-configurations">
@@ -50,7 +50,7 @@
   };
 </script>
 
-  <title>R语言绘图艺术-1（买什么车最省油？） | You Yang</title>
+  <title>ggplot2绘图艺术-1-如何买车？ | You Yang</title>
   
 
 
@@ -171,7 +171,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/17/R%E8%AF%AD%E8%A8%80%E7%BB%98%E5%9B%BE%E8%89%BA%E6%9C%AF-1/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/21/ggplot2%E7%BB%98%E5%9B%BE%E8%89%BA%E6%9C%AF-1-%E5%A6%82%E4%BD%95%E4%B9%B0%E8%BD%A6%EF%BC%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -184,7 +184,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          R语言绘图艺术-1（买什么车最省油？）
+          ggplot2绘图艺术-1-如何买车？
         </h1>
 
         <div class="post-meta">
@@ -194,14 +194,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2023-01-17 20:32:23" itemprop="dateCreated datePublished" datetime="2023-01-17T20:32:23+08:00">2023-01-17</time>
+              <time title="创建时间：2023-01-21 11:04:07" itemprop="dateCreated datePublished" datetime="2023-01-21T11:04:07+08:00">2023-01-21</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-01-20 12:46:59" itemprop="dateModified" datetime="2023-01-20T12:46:59+08:00">2023-01-20</time>
+                <time title="修改时间：2023-01-25 19:11:49" itemprop="dateModified" datetime="2023-01-25T19:11:49+08:00">2023-01-25</time>
               </span>
 
           
@@ -266,7 +266,7 @@
 <h2 id="理解-data-mapping-layer"><a href="#理解-data-mapping-layer" class="headerlink" title="理解 data, mapping, layer"></a>理解 data, mapping, layer</h2><p>我们来举一个简单的例子，为的是更好的理解 ggplot2 的绘图思想，以及我们应该秉着什么原则去绘图。</p>
 <figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ggplot<span class="punctuation">(</span>mpg<span class="punctuation">,</span> aes<span class="punctuation">(</span>x <span class="operator">=</span> displ<span class="punctuation">,</span> y <span class="operator">=</span> hwy<span class="punctuation">)</span><span class="punctuation">)</span> <span class="operator">+</span>  <span class="comment"># x、y可以省略</span></span><br><span class="line">	geom_point<span class="punctuation">(</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="D:\Blog\source_posts\R语言绘图\1-散点图\point-1.png" alt="point-1"></p>
+<p><img src="/2023/01/21/ggplot2%E7%BB%98%E5%9B%BE%E8%89%BA%E6%9C%AF-1-%E5%A6%82%E4%BD%95%E4%B9%B0%E8%BD%A6%EF%BC%9F/point-1.png" alt="point-1"></p>
 <ul>
 <li><p>Data : mpg</p>
 </li>
@@ -286,13 +286,13 @@
 <p>我们把上述代码改成<code>aes(displ, hwy, colour = class)</code></p>
 <p>color也可以变成 shape 、size </p>
 <p>这里我们要说明一下，每个 aesthetic mapping 都有一个 scale 来负责创建坐标轴、标记等。我们这里只是先让大家了解思维，并非探究细节，scale 在后面我会慢慢讲解。</p>
-<p><img src="D:\Blog\source_posts\R语言绘图\1-散点图\point-2-color.png" alt="point-2-color"></p>
+<p><img src="/2023/01/21/ggplot2%E7%BB%98%E5%9B%BE%E8%89%BA%E6%9C%AF-1-%E5%A6%82%E4%BD%95%E4%B9%B0%E8%BD%A6%EF%BC%9F/point-2-color.png" alt="point-2-color"></p>
 <p>发现紧凑型车更省钱！ SUV 属实是耗油巨兽，怪不得大G买得起养不起。。。</p>
 <p>现在我们知道了，<strong>大排量、SUV 在燃油经济性上较差，小排量、经济性在燃油经济性较好。</strong></p>
 <h2 id="Faceting"><a href="#Faceting" class="headerlink" title="Faceting"></a>Faceting</h2><p>也许你是个刚刚接触作图的大学生，希望把所有炫技的操作都整合到一个图上，笔者当年也是如此。我们要知道图是为了更好的理解数据。</p>
-<p>因此 aesthetics mapping 并非越多越好， <strong>less is usually more</strong>。假如我们使用了太多的mapp 你会很难找到变量之间的关系。</p>
+<p>因此 aesthetics mapping 并非越多越好， <strong>less is usually more</strong>。假如我们使用了太多的mapping 你会很难找到变量之间的关系。</p>
 <p>例如这个图：</p>
-<p><img src="D:\Blog\source_posts\R语言绘图\1-散点图\point-3-toomuch.png" alt="point-3-toomuch"></p>
+<p><img src="/2023/01/21/ggplot2%E7%BB%98%E5%9B%BE%E8%89%BA%E6%9C%AF-1-%E5%A6%82%E4%BD%95%E4%B9%B0%E8%BD%A6%EF%BC%9F/point-3-toomuch.png" alt="point-3-toomuch"></p>
 <p>这是一个过于糟糕的图，永远不建议我们这样绘图。但是既然画了，让我们从中发现一些东西，别忘记我们还要买车。</p>
 <ul>
 <li>font （前驱车）最省油，随后是 rear （后驱），最后是四驱（大部分是吉普和 SUV ）。</li>
@@ -301,7 +301,7 @@
 <p>我们没法在一段时间做好许多事情，做好一件事情就是成功。我们不知道如何去表达很多信息时候，那么唯一良好的做法就是<strong>一步步来</strong>。ggplot2 给我们的方法是使用<strong>faceting</strong>。用一系列图片让一个阅读者从无知到熟悉，这就是绘图的艺术。</p>
 <figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ggplot<span class="punctuation">(</span>mpg<span class="punctuation">,</span> aes<span class="punctuation">(</span>displ<span class="punctuation">,</span> hwy<span class="punctuation">)</span><span class="punctuation">)</span> <span class="operator">+</span> </span><br><span class="line">  geom_point<span class="punctuation">(</span><span class="punctuation">)</span> <span class="operator">+</span> </span><br><span class="line">  facet_wrap<span class="punctuation">(</span><span class="operator">~</span><span class="built_in">class</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="D:\Blog\source_posts\R语言绘图\1-散点图\post-4-facetingClass.png" alt="post-4-facetingClass"></p>
+<p><img src="/2023/01/21/ggplot2%E7%BB%98%E5%9B%BE%E8%89%BA%E6%9C%AF-1-%E5%A6%82%E4%BD%95%E4%B9%B0%E8%BD%A6%EF%BC%9F/post-4-facetingClass.png" alt="post-4-facetingClass"></p>
 <p>我们能看到基本分为3个梯度。从省油到不省油顺序基本是紧凑型、中级大小和两座、卡车和 SUV 。faceting的使用让我们一目了然。当一个图表达不了，我们是就多画几个图。</p>
 <h2 id="Geom"><a href="#Geom" class="headerlink" title="Geom"></a>Geom</h2>
     </div>
