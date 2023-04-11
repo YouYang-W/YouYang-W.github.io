@@ -20,17 +20,21 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="游阳">
-<meta property="og:type" content="website">
-<meta property="og:title" content="You Yang">
-<meta property="og:url" content="http://example.com/tags/next/index.html">
+  <meta name="description" content="Simulation ManagerStability limit &amp; time step size红线和蓝线对齐？ Model SetupGeneralFinish time表示仿真的结束时间，根据仿真要求来设置 Interface tracking表示自由表面追踪的类型，包含尖锐的自由表面和不尖锐的自由表面，如果关注自由表面细节则需要选择尖锐的自由表面 Flow mode表示流动类型，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="flow3d学习笔记-2">
+<meta property="og:url" content="http://example.com/2023/04/06/flow3d%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/index.html">
 <meta property="og:site_name" content="You Yang">
-<meta property="og:description" content="游阳">
+<meta property="og:description" content="Simulation ManagerStability limit &amp; time step size红线和蓝线对齐？ Model SetupGeneralFinish time表示仿真的结束时间，根据仿真要求来设置 Interface tracking表示自由表面追踪的类型，包含尖锐的自由表面和不尖锐的自由表面，如果关注自由表面细节则需要选择尖锐的自由表面 Flow mode表示流动类型，">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2023/04/06/flow3d%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/physicsModel.jpg">
+<meta property="article:published_time" content="2023-04-06T02:52:53.000Z">
+<meta property="article:modified_time" content="2023-04-06T03:10:09.763Z">
 <meta property="article:author" content="Youyang">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2023/04/06/flow3d%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/physicsModel.jpg">
 
-<link rel="canonical" href="http://example.com/tags/next/">
+<link rel="canonical" href="http://example.com/2023/04/06/flow3d%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/">
 
 
 <script id="page-configurations">
@@ -38,12 +42,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>标签: next | You Yang</title>
+  <title>flow3d学习笔记-2 | You Yang</title>
   
 
 
@@ -157,51 +161,82 @@
         <div class="content-wrap">
           
 
-          <div class="content tag">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">next
-          <small>标签</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/04/06/flow3d%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Youyang">
+      <meta itemprop="description" content="游阳">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="You Yang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          flow3d学习笔记-2
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-04-06 10:52:53 / 修改时间：11:10:09" itemprop="dateCreated datePublished" datetime="2023-04-06T10:52:53+08:00">2023-04-06</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2023</span>
+        <h1 id="Simulation-Manager"><a href="#Simulation-Manager" class="headerlink" title="Simulation Manager"></a>Simulation Manager</h1><h2 id="Stability-limit-amp-time-step-size"><a href="#Stability-limit-amp-time-step-size" class="headerlink" title="Stability limit &amp; time step size"></a>Stability limit &amp; time step size</h2><p>红线和蓝线对齐？</p>
+<h1 id="Model-Setup"><a href="#Model-Setup" class="headerlink" title="Model Setup"></a>Model Setup</h1><h2 id="General"><a href="#General" class="headerlink" title="General"></a>General</h2><p>Finish time表示仿真的结束时间，根据仿真要求来设置</p>
+<p>Interface tracking表示自由表面追踪的类型，包含尖锐的自由表面和不尖锐的自由表面，如果关注自由表面细节则需要选择尖锐的自由表面</p>
+<p>Flow mode表示流动类型，选择可压缩和不可压缩；Units表示单位，选择仿真中的单位</p>
+<p>Number of fluid表示流体数量，有单流体法和多流体法，单流体法的用用范围为气相的作用可以忽略，类似水和空气，密度比大概1000倍，气相作用可以忽略</p>
+<h2 id="Physics"><a href="#Physics" class="headerlink" title="Physics"></a>Physics</h2><p><img src="/2023/04/06/flow3d%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/physicsModel.jpg" alt="physicsModel"></p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2023-01-08T23:58:22+08:00"
-              content="2023-01-08">
-          01-08
-        </time>
-      </div>
+      <footer class="post-footer">
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2023/01/08/%E5%8D%9A%E5%AE%A2%E7%9A%84%E5%88%9D%E6%AC%A1%E6%90%AD%E5%BB%BA/" itemprop="url">
-            <span itemprop="name">博客的初次搭建</span>
-          </a>
-      </div>
+        
 
-    </header>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/04/02/flow3d%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/" rel="prev" title="flow3d学习笔记-1">
+      <i class="fa fa-chevron-left"></i> flow3d学习笔记-1
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
   </article>
-
-    </div>
-  </div>
   
   
-  
-
   
 
 
@@ -254,6 +289,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Simulation-Manager"><span class="nav-number">1.</span> <span class="nav-text">Simulation Manager</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Stability-limit-amp-time-step-size"><span class="nav-number">1.1.</span> <span class="nav-text">Stability limit &amp; time step size</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Model-Setup"><span class="nav-number">2.</span> <span class="nav-text">Model Setup</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#General"><span class="nav-number">2.1.</span> <span class="nav-text">General</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Physics"><span class="nav-number">2.2.</span> <span class="nav-text">Physics</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
