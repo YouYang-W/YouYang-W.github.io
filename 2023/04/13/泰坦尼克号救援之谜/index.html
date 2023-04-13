@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="泰坦尼克号数据分析1.提出问题1.泰坦尼克号救生船上的男女比例是否符合电影情节（优先保护女性）？ 2.救生船的安放是否合理？是否出现慌乱？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="泰坦尼克号救援之谜">
+<meta property="og:url" content="http://example.com/2023/04/13/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%91%E6%8F%B4%E4%B9%8B%E8%B0%9C/index.html">
+<meta property="og:site_name" content="You Yang">
+<meta property="og:description" content="泰坦尼克号数据分析1.提出问题1.泰坦尼克号救生船上的男女比例是否符合电影情节（优先保护女性）？ 2.救生船的安放是否合理？是否出现慌乱？">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2023/04/13/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%91%E6%8F%B4%E4%B9%8B%E8%B0%9C/image-20220405101922483.png">
+<meta property="og:image" content="http://example.com/2023/04/13/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%91%E6%8F%B4%E4%B9%8B%E8%B0%9C/image-20220405103320713.png">
+<meta property="og:image" content="http://example.com/2023/04/13/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%91%E6%8F%B4%E4%B9%8B%E8%B0%9C/image-20220405104815283.png">
+<meta property="og:image" content="http://example.com/2023/04/13/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%91%E6%8F%B4%E4%B9%8B%E8%B0%9C/image-20220405104754578.png">
+<meta property="og:image" content="http://example.com/2023/04/13/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%91%E6%8F%B4%E4%B9%8B%E8%B0%9C/image-20220405105234701.png">
+<meta property="og:image" content="http://example.com/2023/04/13/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%91%E6%8F%B4%E4%B9%8B%E8%B0%9C/image-20220405111519655.png">
+<meta property="og:image" content="http://example.com/2023/04/13/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%91%E6%8F%B4%E4%B9%8B%E8%B0%9C/image-20220406190014230.png">
+<meta property="article:published_time" content="2023-04-13T12:41:25.000Z">
+<meta property="article:modified_time" content="2023-04-13T12:45:25.548Z">
+<meta property="article:author" content="Youyang">
+<meta property="article:tag" content="泰坦尼克号">
+<meta property="article:tag" content="数据挖掘">
+<meta property="article:tag" content="R语言">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2023/04/13/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%91%E6%8F%B4%E4%B9%8B%E8%B0%9C/image-20220405101922483.png">
+
+<link rel="canonical" href="http://example.com/2023/04/13/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%91%E6%8F%B4%E4%B9%8B%E8%B0%9C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>泰坦尼克号救援之谜 | You Yang</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">You Yang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">我们趋行在人生这个亘古的旅途，在坎坷中奔跑，在挫折里涅槃，忧愁缠满全身，痛苦飘洒一地。我们累，却无从止歇；我们苦，却无法回避。——《百年孤独》</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/04/13/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%91%E6%8F%B4%E4%B9%8B%E8%B0%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Youyang">
+      <meta itemprop="description" content="游阳">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="You Yang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          泰坦尼克号救援之谜
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-04-13 20:41:25 / 修改时间：20:45:25" itemprop="dateCreated datePublished" datetime="2023-04-13T20:41:25+08:00">2023-04-13</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="泰坦尼克号数据分析"><a href="#泰坦尼克号数据分析" class="headerlink" title="泰坦尼克号数据分析"></a>泰坦尼克号数据分析</h1><h2 id="1-提出问题"><a href="#1-提出问题" class="headerlink" title="1.提出问题"></a>1.提出问题</h2><p>1.泰坦尼克号救生船上的男女比例是否符合电影情节（优先保护女性）？</p>
+<p>2.救生船的安放是否合理？是否出现慌乱？</p>
+<span id="more"></span>
+
+<h2 id="2-数据预处理"><a href="#2-数据预处理" class="headerlink" title="2.数据预处理"></a>2.数据预处理</h2><h3 id="2-1-缺失值可视化"><a href="#2-1-缺失值可视化" class="headerlink" title="2.1 缺失值可视化"></a>2.1 缺失值可视化</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">library<span class="punctuation">(</span><span class="string">&#x27;vcd&#x27;</span><span class="punctuation">)</span></span><br><span class="line">library<span class="punctuation">(</span><span class="string">&#x27;grid&#x27;</span><span class="punctuation">)</span></span><br><span class="line">lb <span class="operator">&lt;-</span> Lifeboats <span class="comment"># 导入数据</span></span><br><span class="line"><span class="comment"># 查看缺失值 -------------------------------------------------------------------</span></span><br><span class="line">library<span class="punctuation">(</span>VIM<span class="punctuation">)</span> </span><br><span class="line">matrixplot<span class="punctuation">(</span>lb<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023/04/13/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%91%E6%8F%B4%E4%B9%8B%E8%B0%9C/image-20220405101922483.png" alt="image-20220405101922483"></p>
+<p>发现数据良好，无缺失值。</p>
+<h2 id="3-方差分析"><a href="#3-方差分析" class="headerlink" title="3.方差分析"></a>3.方差分析</h2><h3 id="3-1-交互作用分析"><a href="#3-1-交互作用分析" class="headerlink" title="3.1 交互作用分析"></a>3.1 交互作用分析</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">library<span class="punctuation">(</span>stats<span class="punctuation">)</span></span><br><span class="line"><span class="comment"># 被救援总人数与women和men之间的关系</span></span><br><span class="line">wm <span class="operator">&lt;-</span> aov<span class="punctuation">(</span>total<span class="operator">~</span>women<span class="operator">*</span>men<span class="operator">*</span>crew<span class="punctuation">,</span> data <span class="operator">=</span> lb<span class="punctuation">)</span></span><br><span class="line">summary<span class="punctuation">(</span>wm<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&gt;</span> summary<span class="punctuation">(</span>wm<span class="punctuation">)</span></span><br><span class="line">               Df Sum Sq Mean Sq   <span class="built_in">F</span> value Pr<span class="punctuation">(</span><span class="operator">&gt;</span><span class="built_in">F</span><span class="punctuation">)</span>    </span><br><span class="line">women           <span class="number">1</span>   <span class="number">4465</span>    <span class="number">4465</span> <span class="number">5.380e+32</span> <span class="operator">&lt;</span><span class="number">2e-16</span> <span class="operator">*</span><span class="operator">*</span><span class="operator">*</span></span><br><span class="line">men             <span class="number">1</span>    <span class="number">449</span>     <span class="number">449</span> <span class="number">5.415e+31</span> <span class="operator">&lt;</span><span class="number">2e-16</span> <span class="operator">*</span><span class="operator">*</span><span class="operator">*</span></span><br><span class="line">crew            <span class="number">1</span>    <span class="number">106</span>     <span class="number">106</span> <span class="number">1.275e+31</span> <span class="operator">&lt;</span><span class="number">2e-16</span> <span class="operator">*</span><span class="operator">*</span><span class="operator">*</span></span><br><span class="line">women<span class="operator">:</span>men       <span class="number">1</span>      <span class="number">0</span>       <span class="number">0</span> <span class="number">1.170e-01</span> <span class="number">0.7394</span>    </span><br><span class="line">women<span class="operator">:</span>crew      <span class="number">1</span>      <span class="number">0</span>       <span class="number">0</span> <span class="number">3.520e+00</span> <span class="number">0.0901</span> .  </span><br><span class="line">men<span class="operator">:</span>crew        <span class="number">1</span>      <span class="number">0</span>       <span class="number">0</span> <span class="number">1.628e+00</span> <span class="number">0.2308</span>    </span><br><span class="line">women<span class="operator">:</span>men<span class="operator">:</span>crew  <span class="number">1</span>      <span class="number">0</span>       <span class="number">0</span> <span class="number">2.900e-02</span> <span class="number">0.8681</span>    </span><br><span class="line">Residuals      <span class="number">10</span>      <span class="number">0</span>       <span class="number">0</span>                     </span><br><span class="line"><span class="operator">-</span><span class="operator">-</span><span class="operator">-</span></span><br><span class="line">Signif. codes<span class="operator">:</span>  <span class="number">0</span> ‘<span class="operator">*</span><span class="operator">*</span><span class="operator">*</span>’ <span class="number">0.001</span> ‘<span class="operator">*</span><span class="operator">*</span>’ <span class="number">0.01</span> ‘<span class="operator">*</span>’ <span class="number">0.05</span> ‘.’ <span class="number">0.1</span> ‘ ’ <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>通过方差交互效应分析我们发现，船员优先保护女性，女性获救比例比男性高很多（women : men 的 p 值0.7394）</p>
+<h2 id="4-数据可视化"><a href="#4-数据可视化" class="headerlink" title="4.数据可视化"></a>4.数据可视化</h2><h3 id="4-1-女性、男性、船上船员获救比例图"><a href="#4-1-女性、男性、船上船员获救比例图" class="headerlink" title="4.1 女性、男性、船上船员获救比例图"></a>4.1 女性、男性、船上船员获救比例图</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">type <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&#x27;women&#x27;</span><span class="punctuation">,</span><span class="string">&#x27;men&#x27;</span><span class="punctuation">,</span><span class="string">&#x27;crew&#x27;</span><span class="punctuation">)</span></span><br><span class="line">nums <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="built_in">sum</span><span class="punctuation">(</span>lb<span class="operator">$</span>women<span class="punctuation">)</span><span class="punctuation">,</span> <span class="built_in">sum</span><span class="punctuation">(</span>lb<span class="operator">$</span>men<span class="punctuation">)</span><span class="punctuation">,</span> <span class="built_in">sum</span><span class="punctuation">(</span>lb<span class="operator">$</span>crew<span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">df <span class="operator">&lt;-</span> data.frame<span class="punctuation">(</span>type <span class="operator">=</span> type<span class="punctuation">,</span> nums <span class="operator">=</span> nums<span class="punctuation">)</span></span><br><span class="line">p <span class="operator">&lt;-</span> ggplot<span class="punctuation">(</span>data <span class="operator">=</span> df<span class="punctuation">,</span> mapping <span class="operator">=</span> aes<span class="punctuation">(</span>x <span class="operator">=</span> <span class="string">&#x27;Content&#x27;</span><span class="punctuation">,</span> y <span class="operator">=</span> nums<span class="punctuation">,</span> fill</span><br><span class="line">                                     <span class="operator">=</span> type<span class="punctuation">)</span><span class="punctuation">)</span><span class="operator">+</span></span><br><span class="line">  geom_bar<span class="punctuation">(</span>stat <span class="operator">=</span> <span class="string">&#x27;identity&#x27;</span><span class="punctuation">,</span> position <span class="operator">=</span> <span class="string">&#x27;stack&#x27;</span><span class="punctuation">)</span></span><br><span class="line">p <span class="operator">+</span> coord_polar<span class="punctuation">(</span>theta <span class="operator">=</span> <span class="string">&#x27;y&#x27;</span><span class="punctuation">)</span> <span class="operator">+</span></span><br><span class="line">  labs<span class="punctuation">(</span>x <span class="operator">=</span> <span class="string">&#x27;&#x27;</span><span class="punctuation">,</span> y <span class="operator">=</span> <span class="string">&#x27;&#x27;</span><span class="punctuation">,</span> title <span class="operator">=</span> <span class="string">&#x27;The relation of W&amp;M&amp;C&#x27;</span><span class="punctuation">)</span> <span class="operator">+</span></span><br><span class="line">  theme<span class="punctuation">(</span>axis.text <span class="operator">=</span> element_blank<span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">,</span>panel.grid<span class="operator">=</span>element_blank<span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023/04/13/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%91%E6%8F%B4%E4%B9%8B%E8%B0%9C/image-20220405103320713.png" alt="image-20220405103320713"></p>
+<p>可以看出女性获救比例很高，事实上确实先保护了女性。</p>
+<h3 id="4-2-关于救生船"><a href="#4-2-关于救生船" class="headerlink" title="4.2 关于救生船"></a>4.2 关于救生船</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">qplot(total/cap, data = lb, geom = &#x27;density&#x27;,color=side)</span><br><span class="line"># 查看船容量与实际乘坐人数的关系</span><br><span class="line"># Port是左侧 Starboard是右侧</span><br><span class="line">qplot(women/total, data = lb,geom = c(&#x27;density&#x27;),color = side)</span><br><span class="line"># 查看女性占获救占比总数</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023/04/13/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%91%E6%8F%B4%E4%B9%8B%E8%B0%9C/image-20220405104815283.png" alt="image-20220405104815283"></p>
+<p><img src="/2023/04/13/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%91%E6%8F%B4%E4%B9%8B%E8%B0%9C/image-20220405104754578.png" alt="image-20220405104754578"></p>
+<ul>
+<li>我们明显发现Starboard这一侧做的比较空，可能遇到了慌乱，也许不同侧当时遇到的情况不同。</li>
+<li>女性获救比例在右舷侧更高。</li>
+</ul>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">qplot<span class="punctuation">(</span>side<span class="punctuation">,</span>total<span class="operator">/</span>cap<span class="punctuation">,</span>data <span class="operator">=</span> lb<span class="punctuation">,</span> geom <span class="operator">=</span> <span class="string">&#x27;boxplot&#x27;</span><span class="punctuation">,</span> main <span class="operator">=</span> <span class="string">&#x27;&#x27;</span><span class="punctuation">)</span><span class="operator">+</span></span><br><span class="line">  <span class="comment">#geom_jitter(shape=16, position = position_jitter(0.2))</span></span><br><span class="line">  <span class="comment">#stat_summary(fun.y = mean, geom = &quot;point&quot;, shape = 23, size=4)</span></span><br><span class="line">  geom_dotplot<span class="punctuation">(</span>binaxis <span class="operator">=</span> <span class="string">&#x27;y&#x27;</span><span class="punctuation">,</span> stackdir <span class="operator">=</span> <span class="string">&#x27;center&#x27;</span><span class="punctuation">,</span> dotsize <span class="operator">=</span> <span class="number">0.5</span><span class="punctuation">,</span>color <span class="operator">=</span> <span class="string">&#x27;black&#x27;</span><span class="punctuation">)</span></span><br><span class="line">  <span class="comment"># 添加描点</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023/04/13/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%91%E6%8F%B4%E4%B9%8B%E8%B0%9C/image-20220405105234701.png" alt="image-20220405105234701"></p>
+<p>箱线图可以更好的体现当时的情景。明显左舷侧做的比较满，而右舷侧比较空。左侧也遇到了超载的情况。</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&gt;</span> <span class="built_in">sum</span><span class="punctuation">(</span>lb<span class="operator">$</span>total<span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span> <span class="number">854</span></span><br><span class="line"><span class="operator">&gt;</span> <span class="built_in">sum</span><span class="punctuation">(</span>lb<span class="operator">$</span>cap<span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span> <span class="number">1084</span></span><br></pre></td></tr></table></figure>
+
+<p>通过计算发现实际获救人数比救生船容量少了许多。</p>
+<blockquote>
+<p>泰坦尼克号的救生艇其实设计得非常结实，可以承受70个人的重量，但是船员们却不知道这一点。实际上本可以总共搭载1178人的救生艇，最后只上去了651人（还有一些人是跳海之后被救上救生艇）。在船的左舷，救生船只载妇女和儿童。在右舷，则是妇女优先逃生之后允许男性登艇。所以，在右舷获救的人数比在左舷获救的多。</p>
+<p><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7/5677?msclkid=c2f8ac9fb48511ecb467fd115017d108">泰坦尼克号（英国1912年沉没的巨型游轮）_百度百科 (baidu.com)</a></p>
+</blockquote>
+<p>由于数据量太小,通过查阅资料发现, 实际上右舷侧确实引发了慌乱救援过程出现了骚乱</p>
+<blockquote>
+<p><strong>1：20：</strong>水从E甲板的工作走廊直接往后漫，灌入4号锅炉舱。D层的前部餐厅几乎已成了潜水训练场，船体重心不断缓慢前移。原先平静的顶层甲板乱成一片，乘客终于发觉事态的严重，纷纷挤向救生艇。骚乱在不断地升级，船员开枪压制乘客，疏散工作开始失去控制。</p>
+<p><strong>1：30：</strong>此时船上的人开始发生骚动，当舱侧14号救生艇搭载了60人准备放出时，人群企图跳入艇中，被身处艇中的五等船员劳尔（<em>Lowe</em>）向天开枪吓止。留在泰坦尼克号的人陷入了绝望之中。</p>
+</blockquote>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">qplot<span class="punctuation">(</span>time <span class="punctuation">,</span> total<span class="operator">/</span>cap<span class="punctuation">,</span>geom <span class="operator">=</span> <span class="string">&#x27;line&#x27;</span><span class="punctuation">,</span>color <span class="operator">=</span> side<span class="punctuation">)</span> <span class="operator">+</span> geom_smooth<span class="punctuation">(</span>aes<span class="punctuation">(</span>group <span class="operator">=</span> side<span class="punctuation">)</span><span class="punctuation">,</span> method <span class="operator">=</span> <span class="string">&quot;loess&quot;</span></span><br><span class="line">  <span class="punctuation">,</span> se <span class="operator">=</span> <span class="built_in">T</span><span class="punctuation">,</span>alpha <span class="operator">=</span> <span class="number">0.2</span><span class="punctuation">,</span>color <span class="operator">=</span> <span class="string">&#x27;black&#x27;</span><span class="punctuation">)</span></span><br><span class="line"><span class="comment"># 查看左右侧乘坐率的区别</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><input disabled type="checkbox"> <img src="/2023/04/13/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%91%E6%8F%B4%E4%B9%8B%E8%B0%9C/image-20220405111519655.png" alt="image-20220405111519655"></li>
+</ul>
+<p>发现</p>
+<ul>
+<li>左侧一开始没有坐满,后期却又超载不少.</li>
+<li><strong>右侧乘坐率越来越多,但是始终没有坐满,在右侧发生骚乱后,出现了乘坐率突然下降的趋势,此时情景慌乱.</strong></li>
+</ul>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">data<span class="punctuation">(</span><span class="string">&quot;Lifeboats&quot;</span><span class="punctuation">)</span></span><br><span class="line">attach<span class="punctuation">(</span>Lifeboats<span class="punctuation">)</span></span><br><span class="line">ternaryplot<span class="punctuation">(</span></span><br><span class="line">  Lifeboats<span class="punctuation">[</span><span class="punctuation">,</span><span class="number">4</span><span class="operator">:</span><span class="number">6</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  pch <span class="operator">=</span> ifelse<span class="punctuation">(</span>side <span class="operator">==</span> <span class="string">&quot;Port&quot;</span><span class="punctuation">,</span> <span class="number">1</span><span class="punctuation">,</span> <span class="number">19</span><span class="punctuation">)</span><span class="punctuation">,</span> <span class="comment"># 3,17代表小圆点类型</span></span><br><span class="line">  col <span class="operator">=</span> ifelse<span class="punctuation">(</span>side <span class="operator">==</span> <span class="string">&quot;Port&quot;</span><span class="punctuation">,</span> <span class="string">&quot;red&quot;</span><span class="punctuation">,</span> <span class="string">&quot;steelblue&quot;</span><span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">  id  <span class="operator">=</span> ifelse<span class="punctuation">(</span>men <span class="operator">/</span> total <span class="operator">&gt;</span> <span class="number">0.1</span><span class="punctuation">,</span> <span class="built_in">as.character</span><span class="punctuation">(</span>boat<span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">  prop_size <span class="operator">=</span> <span class="number">1.3</span><span class="punctuation">,</span></span><br><span class="line">  dimnames_position <span class="operator">=</span> <span class="string">&quot;corner&quot;</span><span class="punctuation">,</span><span class="comment"># 把三项图元素写在角</span></span><br><span class="line">  main <span class="operator">=</span> <span class="string">&quot;Lifeboats on the Titanic&quot;</span><span class="punctuation">,</span> <span class="comment"># 标题</span></span><br><span class="line">  labels <span class="operator">=</span> <span class="string">&#x27;outside&#x27;</span><span class="punctuation">,</span> <span class="comment"># 表内标签的位置写在外面</span></span><br><span class="line"></span><br><span class="line"><span class="punctuation">)</span></span><br><span class="line">grid_legend<span class="punctuation">(</span><span class="number">1.2</span><span class="punctuation">,</span> <span class="number">0.9</span><span class="punctuation">,</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> <span class="number">19</span><span class="punctuation">)</span><span class="punctuation">,</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;red&quot;</span><span class="punctuation">,</span> <span class="string">&quot;steelblue&quot;</span><span class="punctuation">)</span><span class="punctuation">,</span> <span class="comment"># 加上标注</span></span><br><span class="line">            <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;Port&quot;</span><span class="punctuation">,</span> <span class="string">&quot;Starboard&quot;</span><span class="punctuation">)</span><span class="punctuation">,</span> title <span class="operator">=</span> <span class="string">&quot;SIDE&quot;</span><span class="punctuation">)</span></span><br><span class="line">detach<span class="punctuation">(</span>Lifeboats<span class="punctuation">)</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023/04/13/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%91%E6%8F%B4%E4%B9%8B%E8%B0%9C/image-20220406190014230.png" alt="image-20220406190014230"></p>
+<p>从三相图可以看出，女性被救援比例高，船员负责航行船只，所以获救也比男性高。</p>
+<h2 id="5-Consequence"><a href="#5-Consequence" class="headerlink" title="5.Consequence"></a>5.Consequence</h2><h3 id="5-1-回答疑问"><a href="#5-1-回答疑问" class="headerlink" title="5.1 回答疑问"></a>5.1 回答疑问</h3><ol>
+<li>女性乘客在这个悲剧中首先获救，其次是船员（为了航行船只），男性乘客获救比例最低</li>
+<li>.救生船大部分没有做满,而且左右侧的情况不一样.</li>
+</ol>
+<h3 id="5-2-过程中的发现"><a href="#5-2-过程中的发现" class="headerlink" title="5.2 过程中的发现"></a>5.2 过程中的发现</h3><p>通过对左舷右舷数据的处理发现</p>
+<ol>
+<li><p>船员对于救生船能坐的人数不清楚,起始阶段很多船没有被利用好,乘座率并不高.</p>
+</li>
+<li><p>右舷侧发生了骚乱,在救援时候人们发生了争执,由于争夺,导致最后右舷获救反而变少,还出现了停止上船的事故.</p>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7/" rel="tag"># 泰坦尼克号</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/" rel="tag"># 数据挖掘</a>
+              <a href="/tags/R%E8%AF%AD%E8%A8%80/" rel="tag"># R语言</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/04/06/flow3d%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/" rel="prev" title="flow3d学习笔记-2">
+      <i class="fa fa-chevron-left"></i> flow3d学习笔记-2
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B3%B0%E5%9D%A6%E5%B0%BC%E5%85%8B%E5%8F%B7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">泰坦尼克号数据分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%8F%90%E5%87%BA%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">1.提出问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86"><span class="nav-number">1.2.</span> <span class="nav-text">2.数据预处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E7%BC%BA%E5%A4%B1%E5%80%BC%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 缺失值可视化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%96%B9%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-number">1.3.</span> <span class="nav-text">3.方差分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E4%BA%A4%E4%BA%92%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 交互作用分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">1.4.</span> <span class="nav-text">4.数据可视化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E5%A5%B3%E6%80%A7%E3%80%81%E7%94%B7%E6%80%A7%E3%80%81%E8%88%B9%E4%B8%8A%E8%88%B9%E5%91%98%E8%8E%B7%E6%95%91%E6%AF%94%E4%BE%8B%E5%9B%BE"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.1 女性、男性、船上船员获救比例图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%85%B3%E4%BA%8E%E6%95%91%E7%94%9F%E8%88%B9"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.2 关于救生船</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Consequence"><span class="nav-number">1.5.</span> <span class="nav-text">5.Consequence</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E5%9B%9E%E7%AD%94%E7%96%91%E9%97%AE"><span class="nav-number">1.5.1.</span> <span class="nav-text">5.1 回答疑问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%8F%91%E7%8E%B0"><span class="nav-number">1.5.2.</span> <span class="nav-text">5.2 过程中的发现</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Youyang</p>
+  <div class="site-description" itemprop="description">游阳</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/YouYang-W" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;YouYang-W" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/YouYang_Wang?spm=1035.2022.3001.5343" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;YouYang_Wang?spm&#x3D;1035.2022.3001.5343" rel="noopener" target="_blank"><i class="CSDN fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Youyang</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
