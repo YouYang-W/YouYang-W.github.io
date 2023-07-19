@@ -20,16 +20,17 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Simulation ManagerStability limit &amp; time step size红线和蓝线对齐？">
+  <meta name="description" content="Simulation ManagerStability limit &amp; time step size 红线和蓝线平稳对齐时候，解变得收敛。 当显示步长过小时候，在 Model Setup 里修改 Mininum time step。 可以先做 Preprocess simulation  检查一下。 左下角可以暂停 Simulation。 运行时，可以在 Runtime Options 里">
 <meta property="og:type" content="article">
 <meta property="og:title" content="flow3d学习笔记-2">
 <meta property="og:url" content="http://example.com/2023/04/06/flow3d%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/index.html">
 <meta property="og:site_name" content="You Yang">
-<meta property="og:description" content="Simulation ManagerStability limit &amp; time step size红线和蓝线对齐？">
+<meta property="og:description" content="Simulation ManagerStability limit &amp; time step size 红线和蓝线平稳对齐时候，解变得收敛。 当显示步长过小时候，在 Model Setup 里修改 Mininum time step。 可以先做 Preprocess simulation  检查一下。 左下角可以暂停 Simulation。 运行时，可以在 Runtime Options 里">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/2023/04/06/flow3d%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/physicsModel.jpg">
+<meta property="og:image" content="http://example.com/2023/04/06/flow3d%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/%E8%BE%B9%E7%95%8C%E6%9D%A1%E4%BB%B6.jpg">
 <meta property="article:published_time" content="2023-04-06T02:52:53.000Z">
-<meta property="article:modified_time" content="2023-04-13T12:46:35.724Z">
+<meta property="article:modified_time" content="2023-07-19T09:01:06.393Z">
 <meta property="article:author" content="Youyang">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2023/04/06/flow3d%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/physicsModel.jpg">
@@ -198,7 +199,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-04-13 20:46:35" itemprop="dateModified" datetime="2023-04-13T20:46:35+08:00">2023-04-13</time>
+                <time title="修改时间：2023-07-19 17:01:06" itemprop="dateModified" datetime="2023-07-19T17:01:06+08:00">2023-07-19</time>
               </span>
 
           
@@ -212,14 +213,31 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Simulation-Manager"><a href="#Simulation-Manager" class="headerlink" title="Simulation Manager"></a>Simulation Manager</h1><h2 id="Stability-limit-amp-time-step-size"><a href="#Stability-limit-amp-time-step-size" class="headerlink" title="Stability limit &amp; time step size"></a>Stability limit &amp; time step size</h2><p>红线和蓝线对齐？</p>
+        <h1 id="Simulation-Manager"><a href="#Simulation-Manager" class="headerlink" title="Simulation Manager"></a>Simulation Manager</h1><h2 id="Stability-limit-amp-time-step-size"><a href="#Stability-limit-amp-time-step-size" class="headerlink" title="Stability limit &amp; time step size"></a>Stability limit &amp; time step size</h2><ol>
+<li>红线和蓝线平稳对齐时候，解变得收敛。</li>
+<li>当显示步长过小时候，在 Model Setup 里修改 Mininum time step。</li>
+<li>可以先做 Preprocess simulation  检查一下。</li>
+<li>左下角可以暂停 Simulation。</li>
+<li>运行时，可以在 Runtime Options 里修改运行时间。</li>
+</ol>
 <span id="more"></span>
 
-<h1 id="Model-Setup"><a href="#Model-Setup" class="headerlink" title="Model Setup"></a>Model Setup</h1><h2 id="General"><a href="#General" class="headerlink" title="General"></a>General</h2><p>Finish time表示仿真的结束时间，根据仿真要求来设置</p>
-<p>Interface tracking表示自由表面追踪的类型，包含尖锐的自由表面和不尖锐的自由表面，如果关注自由表面细节则需要选择尖锐的自由表面</p>
-<p>Flow mode表示流动类型，选择可压缩和不可压缩；Units表示单位，选择仿真中的单位</p>
-<p>Number of fluid表示流体数量，有单流体法和多流体法，单流体法的用用范围为气相的作用可以忽略，类似水和空气，密度比大概1000倍，气相作用可以忽略</p>
+<h1 id="Model-Setup"><a href="#Model-Setup" class="headerlink" title="Model Setup"></a>Model Setup</h1><h2 id="General"><a href="#General" class="headerlink" title="General"></a>General</h2><p>Finish time（重要） 表示仿真的结束时间，根据仿真要求来设置。一般情况，流速越大，需要的模拟时间越多，流速越慢，需要的模拟时间越少。</p>
+<p>Pressure solver options，Implict 是隐式求解，GMRES 是迭代求解。</p>
+<p>Interface tracking表示自由表面追踪的类型，包含尖锐的自由表面和不尖锐的自由表面，如果关注自由表面细节则需要选择尖锐的自由表面。</p>
+<p>Flow mode表示流动类型，选择可压缩和不可压缩；Units表示单位，选择仿真中的单位。</p>
+<p>Number of fluid表示流体数量，有单流体法和多流体法，单流体法的用用范围为气相的作用可以忽略，类似水和空气，密度比大概1000倍，气相作用可以忽略。</p>
 <h2 id="Physics"><a href="#Physics" class="headerlink" title="Physics"></a>Physics</h2><p><img src="/2023/04/06/flow3d%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/physicsModel.jpg" alt="physicsModel"></p>
+<h2 id="Fluids"><a href="#Fluids" class="headerlink" title="Fluids"></a>Fluids</h2><p>fluid 1 要选择 Database 加载自己想要的流体</p>
+<h2 id="Meshing-amp-Geometry"><a href="#Meshing-amp-Geometry" class="headerlink" title="Meshing &amp; Geometry"></a>Meshing &amp; Geometry</h2><h3 id="Geometry"><a href="#Geometry" class="headerlink" title="Geometry"></a>Geometry</h3><p>建立简单模型可以用此模块中的功能，或者直接导入 Stl 模型</p>
+<p>若想输出此结构所受的力，需要选择下方的 Component Properties ，随后点击 Output 勾选Pressure and Shear Force Output。我这里经常选择的是 Reference pressure is code calculated。</p>
+<h3 id="Mesh-Operations"><a href="#Mesh-Operations" class="headerlink" title="Mesh Operations"></a>Mesh Operations</h3><ul>
+<li>Mesh Cell : 指定网格数目有两种方式，分别是指定 Size of cells （网格尺寸）和 Total Cells（整体网格数）</li>
+<li>X&#x2F;Y&#x2F;Z direction 指定网格区域，假如想研究二维流动，可以设置无重力条件，以及Z方向上网格数目为1，这样在垂直方向就不会产生流动。</li>
+</ul>
+<h3 id="Boudary-Conditions"><a href="#Boudary-Conditions" class="headerlink" title="Boudary Conditions"></a>Boudary Conditions</h3><p>常用的有 outflow 自由出流，symmetry 自由边界，假如有加密网格和其他网格相接情况，可以选择 continuative 作为连续边界。</p>
+<p><img src="/2023/04/06/flow3d%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/%E8%BE%B9%E7%95%8C%E6%9D%A1%E4%BB%B6.jpg" alt="边界条件"></p>
+<h3 id="Initial-（初始条件）"><a href="#Initial-（初始条件）" class="headerlink" title="Initial （初始条件）"></a>Initial （初始条件）</h3><p>随着时间的增长，初始条件会越来越不重要。</p>
 
     </div>
 
@@ -300,7 +318,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Simulation-Manager"><span class="nav-number">1.</span> <span class="nav-text">Simulation Manager</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Stability-limit-amp-time-step-size"><span class="nav-number">1.1.</span> <span class="nav-text">Stability limit &amp; time step size</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Model-Setup"><span class="nav-number">2.</span> <span class="nav-text">Model Setup</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#General"><span class="nav-number">2.1.</span> <span class="nav-text">General</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Physics"><span class="nav-number">2.2.</span> <span class="nav-text">Physics</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Simulation-Manager"><span class="nav-number">1.</span> <span class="nav-text">Simulation Manager</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Stability-limit-amp-time-step-size"><span class="nav-number">1.1.</span> <span class="nav-text">Stability limit &amp; time step size</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Model-Setup"><span class="nav-number">2.</span> <span class="nav-text">Model Setup</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#General"><span class="nav-number">2.1.</span> <span class="nav-text">General</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Physics"><span class="nav-number">2.2.</span> <span class="nav-text">Physics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fluids"><span class="nav-number">2.3.</span> <span class="nav-text">Fluids</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Meshing-amp-Geometry"><span class="nav-number">2.4.</span> <span class="nav-text">Meshing &amp; Geometry</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Geometry"><span class="nav-number">2.4.1.</span> <span class="nav-text">Geometry</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mesh-Operations"><span class="nav-number">2.4.2.</span> <span class="nav-text">Mesh Operations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Boudary-Conditions"><span class="nav-number">2.4.3.</span> <span class="nav-text">Boudary Conditions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Initial-%EF%BC%88%E5%88%9D%E5%A7%8B%E6%9D%A1%E4%BB%B6%EF%BC%89"><span class="nav-number">2.4.4.</span> <span class="nav-text">Initial （初始条件）</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -314,12 +332,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">11</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
